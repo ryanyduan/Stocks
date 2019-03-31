@@ -1,12 +1,23 @@
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
+const passport = require("passport");
 
+const ensureAuthenticated = require("../services/auth");
 const User = require("../db/models/User");
 
-router.get("/login", (req, res) => {
-  // find login then see if passwords match
-  const { login, password } = req.body;
+router.post("/login", (req, res, next) => {
+  passport.authenticate("local", {
+    successRedirect: "/dashboard",
+    failureRedirect: "/users/login"
+  })(req, res, next);
+
+  console.log("Goodsies");
+});
+
+router.get("/logout", (req, res) => {
+  req.logout();
+  res.redirect("/users/login");
 });
 
 router.post("/register", async (req, res) => {
@@ -35,6 +46,10 @@ router.post("/register", async (req, res) => {
       res.status(200).send({ msg: "User successfully registered" });
     }
   }
+});
+
+router.get("/stocks", ensureAuthenticated, (req, res) => {
+  console.log("stocks hit");
 });
 
 module.exports = router;
