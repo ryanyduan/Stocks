@@ -16,9 +16,9 @@ app.use(express.urlencoded({ extended: false }));
 // Sessions
 app.use(
   session({
-    secret: "secret",
-    resave: true,
-    saveUninitialized: true
+    secret: "jiafoerzhewhhowehfaefh", // this is used to hash
+    resave: false, // save only if user edits session
+    saveUninitialized: false // dont save unless logged in
   })
 );
 

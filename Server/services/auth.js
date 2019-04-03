@@ -1,20 +1,8 @@
 ensureAuthenticated = (req, res, next) => {
-  if (req.isAuthenticated()) {
-    return next();
-  }
-  res.redirect("/users/login");
-};
-
-handleError = (err, req, res, next) => {
-  const output = {
-    error: {
-      name: err.name,
-      message: err.message,
-      text: err.toString()
+    if (req.isAuthenticated()) {
+        return next();
     }
-  };
-  const statusCode = err.status || 401;
-  res.status(statusCode).json(output);
+    res.status(401).redirect("/users/login");
 };
 
-module.exports = { ensureAuthenticated, handleError };
+module.exports = { ensureAuthenticated };

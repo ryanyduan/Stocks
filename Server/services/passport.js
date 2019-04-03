@@ -3,16 +3,16 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const User = require("../db/models/User");
 
-module.exports = function(passport) {
+module.exports = passport => {
   passport.use(
     new LocalStrategy(
       { usernameField: "username" },
       async (username, password, done) => {
-        const user = await User.findOne({ username });
+        let user = await User.findOne({ username });
         if (!user) {
           user = await User.findOne({ email: username });
           if (!user) {
-            return done(null, false, { msg: "User not registered" });
+            return done(null, false, { message: "User not registered" });
           }
         }
 
@@ -20,7 +20,7 @@ module.exports = function(passport) {
         if (match) {
           return done(null, user);
         } else {
-          return done(null, false, { msg: "Incorrect password" });
+          return done(null, false, { message: "Incorrect password" });
         }
       }
     )
