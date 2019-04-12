@@ -20,6 +20,7 @@ router.post("/login", async (req, res) => {
             jwt.sign(
                 { user },
                 config.secret,
+                { expiresIn: "1h" },
                 { algorithm: "HS256" }, //can't use RS256 cause of invalid SSL certificate
                 (err, token) => {
                     if (err) console.log(err);
@@ -68,11 +69,6 @@ router.post("/register", async (req, res) => {
             });
         }
     }
-});
-
-router.get("/stocks", verifyToken, (req, res) => {
-    console.log("hey");
-    // console.log(req.user);
 });
 
 module.exports = router;
