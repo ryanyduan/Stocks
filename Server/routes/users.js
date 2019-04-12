@@ -2,12 +2,12 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const config = require("../config");
+const verifyToken = require("../services/authenticate").verifyToken;
 
 const User = require("../db/models/User");
 
-const secretKey = "ulilagfeawfgaewkdylewauh";
-
-router.post("/login", async (req, res, next) => {
+router.post("/login", async (req, res) => {
     const { user, password } = req.body;
 
     const exists = await User.find({
@@ -19,7 +19,7 @@ router.post("/login", async (req, res, next) => {
         if (match) {
             jwt.sign(
                 { user },
-                secretKey,
+                config.secret,
                 { algorithm: "HS256" }, //can't use RS256 cause of invalid SSL certificate
                 (err, token) => {
                     if (err) console.log(err);
@@ -35,7 +35,7 @@ router.get("/logout", (req, res) => {
 });
 
 router.get("/login", (req, res) => {
-    res.send({ msg: "Login" }).end();
+    res.send({ msg: "Login" });
 });
 
 router.post("/register", async (req, res) => {
@@ -49,9 +49,7 @@ router.post("/register", async (req, res) => {
             $or: [{ username }, { email }]
         });
         if (userexists) {
-            res.status(499)
-                .send({ errorMsg: "User is already registered" })
-                .end();
+            res.status(499).send({ errorMsg: "User is already registered" });
         } else {
             const newUser = new User({
                 username,
@@ -66,14 +64,15 @@ router.post("/register", async (req, res) => {
                 let hashed = await bcrypt.hash(newUser.password, salt);
                 newUser.password = hashed;
                 await newUser.save();
-                res.send({ msg: "User successfully registered" }).end();
+                res.send({ msg: "User successfully registered" });
             });
         }
     }
 });
 
-router.get("/stocks", (req, res) => {
-    console.log(req.user);
+router.get("/stocks", verifyToken, (req, res) => {
+    console.log("hey");
+    // console.log(req.user);
 });
 
 module.exports = router;
