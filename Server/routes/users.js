@@ -1,39 +1,57 @@
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
-const passport = require("passport");
+const jwt = require("jsonwebtoken");
 
-const { ensureAuthenticated } = require("../services/auth");
 const User = require("../db/models/User");
 
-router.post("/login", (req, res, next) => {
-    passport.authenticate("local", {
-        // failWithError: true,
-        successRedirect: "/dashboard"
-        // failureRedirect: "/users/login"
-    })(req, res, next);
+const secretKey = "ulilagfeawfgaewkdylewauh";
+
+router.post("/login", async (req, res, next) => {
+    const { user, password } = req.body;
+
+    const exists = await User.find({
+        $or: [{ username: user }, { email: user }]
+    });
+
+    if (exists) {
+        const match = await bcrypt.compare(password, exists[0].password);
+        if (match) {
+            jwt.sign(
+                { user },
+                secretKey,
+                { algorithm: "HS256" }, //can't use RS256 cause of invalid SSL certificate
+                (err, token) => {
+                    if (err) console.log(err);
+                    res.send({ token });
+                }
+            );
+        }
+    } else res.status(400).send({ msg: "Wrong password" });
 });
 
-router.get("/logout", ensureAuthenticated, (req, res) => {
-    req.logout();
-    res.redirect(200, "/users/login");
+router.get("/logout", (req, res) => {
+    // TO DO
 });
 
 router.get("/login", (req, res) => {
-    // res.send(req.statusCode);
-    // console.log(req);
-    res.send({ msg: "Login" });
+    res.send({ msg: "Login" }).end();
 });
 
 router.post("/register", async (req, res) => {
     const { username, password, email, firstName, lastName } = req.body;
     if (!username || !password || !email || !firstName || !lastName) {
-        res.status(422).send({ errorMsg: "Invalid input" });
+        res.status(422)
+            .send({ errorMsg: "Invalid input" })
+            .end();
     } else {
-        const emailExists = await User.findOne({ email });
-        const usernameExists = await User.findOne({ username });
-        if (emailExists || usernameExists) {
-            res.status(499).send({ errorMsg: "User is already registered" });
+        const userexists = await User.findOne({
+            $or: [{ username }, { email }]
+        });
+        if (userexists) {
+            res.status(499)
+                .send({ errorMsg: "User is already registered" })
+                .end();
         } else {
             const newUser = new User({
                 username,
@@ -48,17 +66,13 @@ router.post("/register", async (req, res) => {
                 let hashed = await bcrypt.hash(newUser.password, salt);
                 newUser.password = hashed;
                 await newUser.save();
-                // res.send({ msg: "User successfully registered" });
-                req.logIn(newUser, (err) => {
-                    if (err) return next(err);
-                    return res.redirect("../dashboard");
-                });
+                res.send({ msg: "User successfully registered" }).end();
             });
         }
     }
 });
 
-router.get("/stocks", ensureAuthenticated, (req, res) => {
+router.get("/stocks", (req, res) => {
     console.log(req.user);
 });
 
