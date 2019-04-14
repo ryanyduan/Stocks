@@ -10,21 +10,20 @@ const User = require("../db/models/User");
 router.post("/login", async (req, res) => {
     const { user, password } = req.body;
 
-    const exists = await User.find({
+    const exists = await User.findOne({
         $or: [{ username: user }, { email: user }]
     });
 
     if (exists) {
-        const match = await bcrypt.compare(password, exists[0].password);
+        const match = await bcrypt.compare(password, exists.password);
         if (match) {
             jwt.sign(
-                { user },
+                { user: exists },
                 config.secret,
-                { expiresIn: "1h" },
                 { algorithm: "HS256" }, //can't use RS256 cause of invalid SSL certificate
                 (err, token) => {
                     if (err) console.log(err);
-                    res.send({ token });
+                    else res.send({ token });
                 }
             );
         }

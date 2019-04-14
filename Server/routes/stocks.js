@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const verifyToken = require("../services/authenticate").verifyToken;
 
 const User = require("../db/models/User");
 
@@ -29,3 +30,5 @@ router.delete("deleteStock", verifyToken, async (req, res) => {
         res.send({ msg: `{stock} successfully deleted` });
     }
 });
+
+module.exports = router;
