@@ -23,11 +23,21 @@ router.post("/login", async (req, res) => {
                 { algorithm: "HS256" }, //can't use RS256 cause of invalid SSL certificate
                 (err, token) => {
                     if (err) console.log(err);
-                    else res.send({ token });
+                    else res.send({ authenticated: true, token, status: "ok" });
                 }
             );
-        }
-    } else res.status(400).send({ msg: "Wrong password" });
+        } else
+            res.send({
+                authenticated: false,
+                msg: "Wrong password",
+                status: "ok"
+            });
+    } else
+        res.send({
+            authenticated: false,
+            msg: "User does not exist",
+            status: "ok"
+        });
 });
 
 router.get("/logout", (req, res) => {
