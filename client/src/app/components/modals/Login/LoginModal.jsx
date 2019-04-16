@@ -38,7 +38,7 @@ class LoginModal extends Component {
             password: password.value
         }).then((response) =>
             response.status === 200
-                ? this.setState({ redirect: true })
+                ? this.setState({ redirect: true }, () => localStorage.setItem("token", response.data.token)) // store JWT in local storage
                 : this.handleError(response.data.errorType)
         );
     };

@@ -65,7 +65,7 @@ class RegisterModal extends Component {
 
     render(){
         const { msg, emailError, usernameError, password1Error, password2Error, error, matchError, redirect } = this.state;
-        if (redirect) return <Redirect to='/dashboard' />;
+        if (redirect) return <Redirect to='/' />;
          return (
             <Grid columns={1} centered>
                 <Grid.Row>
