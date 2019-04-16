@@ -23,60 +23,41 @@ router.post("/login", async (req, res) => {
                 { algorithm: "HS256" }, //can't use RS256 cause of invalid SSL certificate
                 (err, token) => {
                     if (err) console.log(err);
-                    else res.send({ authenticated: true, token, status: "ok" });
+                    else res.send({ token });
                 }
             );
-        } else
-            res.send({
-                authenticated: false,
-                msg: "Wrong password",
-                status: "ok"
-            });
-    } else
-        res.send({
-            authenticated: false,
-            msg: "User does not exist",
-            status: "ok"
-        });
+        } else res.status(403).send({ errorType: "password" });
+    } else res.status(403).send({ errorType: "DNE" });
 });
 
-router.get("/logout", (req, res) => {
+router.post("/logout", verifyToken, (req, res) => {
     // TO DO
 });
 
-router.get("/login", (req, res) => {
-    res.send({ msg: "Login" });
-});
-
 router.post("/register", async (req, res) => {
-    const { username, password, email, firstName, lastName } = req.body;
-    if (!username || !password || !email || !firstName || !lastName) {
-        res.status(422)
-            .send({ errorMsg: "Invalid input" })
-            .end();
+    const { email, username, password } = req.body;
+
+    const usernameExists = await User.findOne({ username });
+    const emailExists = await User.findOne({ email });
+
+    if (usernameExists) {
+        res.status(499).send({ errorType: "usernameExists" });
+    } else if (emailExists) {
+        res.status(499).send({ errorType: "emailExists" });
     } else {
-        const userexists = await User.findOne({
-            $or: [{ username }, { email }]
+        const newUser = new User({
+            email,
+            username,
+            password
         });
-        if (userexists) {
-            res.status(499).send({ errorMsg: "User is already registered" });
-        } else {
-            const newUser = new User({
-                username,
-                password,
-                email,
-                firstName,
-                lastName
-            });
-            // Hash Password
-            bcrypt.genSalt(10, async (err, salt) => {
-                if (err) throw err;
-                let hashed = await bcrypt.hash(newUser.password, salt);
-                newUser.password = hashed;
-                await newUser.save();
-                res.send({ msg: "User successfully registered" });
-            });
-        }
+        // Hash Password
+        bcrypt.genSalt(10, async (err, salt) => {
+            if (err) throw err;
+            let hashed = await bcrypt.hash(newUser.password, salt);
+            newUser.password = hashed;
+            await newUser.save();
+            res.sendStatus(200);
+        });
     }
 });
 
