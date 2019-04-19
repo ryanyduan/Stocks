@@ -1,12 +1,12 @@
 FROM node:9.4
 
-WORKDIR /api
+WORKDIR /usr/src/api
 
-COPY package.json .
+COPY ./package*.json ./
 
 RUN npm install
 
-COPY . .
+COPY ./ .
 
 EXPOSE 5000
 
