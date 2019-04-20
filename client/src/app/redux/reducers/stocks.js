@@ -7,7 +7,7 @@ export const stocks = (state = [], action) => {
         case ADD_STOCK:
             return [...state, action.payload];
         case DELETE_STOCK:
-            const found = state.findIndex((item) => item === action.payload);
+            const found = state.findIndex((item) => item.name === action.payload);
             if (found !== -1) {
                 state.splice(found, 1);
                 return [...state];

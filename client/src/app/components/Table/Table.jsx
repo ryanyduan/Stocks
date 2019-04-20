@@ -40,7 +40,7 @@ class StocksTable extends Component {
     handleRemove = (id, e) => {
         e.preventDefault();
         this.props
-            .reqDeleteStock({ stock: this.props.stocks[id] })
+            .reqDeleteStock({ delStock: this.props.stocks[id].name })
             .then((response) => (response.status === 200 ? null : this.handleError(response.data)));
     };
 
@@ -51,8 +51,8 @@ class StocksTable extends Component {
         <Table.Body>
             {this.props.stocks.map((stock, id) => (
                 <Table.Row key={id} textAlign='center'>
-                    <Table.Cell>{stock}</Table.Cell>
-                    <Table.Cell>19</Table.Cell>
+                    <Table.Cell>{stock.name}</Table.Cell>
+                    <Table.Cell>${stock.price}</Table.Cell>
                     <Table.Cell>
                         <Button
                             icon='trash alternate outline'
