@@ -1,7 +1,8 @@
 import React, { Component } from "react";
-import { Menu } from "semantic-ui-react";
+import { Menu, Container } from "semantic-ui-react";
 import { Route, Redirect } from "react-router-dom";
 import { isAuth } from "../services/auth";
+import "./MainLayout.scss";
 
 class MainLayout extends Component {
     render() {
@@ -11,10 +12,12 @@ class MainLayout extends Component {
                 render={(props) => {
                     return (
                         <div>
-                            <Menu fixed='top' inverted>
+                            <Menu inverted className='main-menu'>
                                 <Menu.Item>Stocks</Menu.Item>
                             </Menu>
-                            <this.props.component {...props} />
+                            <Container fluid>
+                                <this.props.component {...props} />
+                            </Container>
                         </div>
                     );
                 }}
