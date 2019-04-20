@@ -8,10 +8,12 @@ export const fetchStocks = () => async (dispatch) => {
 
 export const reqAddStock = (stock) => async (dispatch) => {
     const response = await addStock(stock);
-    dispatch({ type: ADD_STOCK, payload: response.data });
+    if (response.status === 200) dispatch({ type: ADD_STOCK, payload: response.data });
+    return response;
 };
 
 export const reqDeleteStock = (stock) => async (dispatch) => {
     const response = await deleteStock(stock);
-    dispatch({ type: DELETE_STOCK, payload: response.data });
+    if (response.status === 200) dispatch({ type: DELETE_STOCK, payload: response.data });
+    return response;
 };

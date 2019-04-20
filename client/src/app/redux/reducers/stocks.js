@@ -8,8 +8,10 @@ export const stocks = (state = [], action) => {
             return [...state, action.payload];
         case DELETE_STOCK:
             const found = state.findIndex((item) => item === action.payload);
-            if (found !== -1) return state.splice(found, 1);
-            else return state;
+            if (found !== -1) {
+                state.splice(found, 1);
+                return [...state];
+            } else return state;
         default:
             return state;
     }

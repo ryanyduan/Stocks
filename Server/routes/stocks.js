@@ -14,20 +14,25 @@ router.get("/getStocks", verifyToken, async (req, res) => {
 router.post("/addStock", verifyToken, async (req, res) => {
     const { newStock } = req.body;
     const user = await User.findOne({ username: req.decoded.user.username });
-    user.stocks.push(newStock);
-    await user.save();
-    res.send(newStock);
+    const found = user.stocks.findIndex((stock) => stock === newStock);
+    if (found !== -1) res.status(422).send({ errorType: "exists", stock: newStock });
+    else {
+        user.stocks.push(newStock);
+        await user.save();
+        res.send(newStock);
+    }
 });
 
-router.post("deleteStock", verifyToken, async (req, res) => {
+router.post("/deleteStock", verifyToken, async (req, res) => {
     const { stock } = req.body;
     const user = await User.findOne({ username: req.decoded.user.username });
 
-    const found = user.stocks.findIndex(stock);
-    if (found === -1) res.status(404).send({ msg: "Stock not found" });
+    const found = user.stocks.findIndex((stock) => stock === stock);
+    if (found === -1) res.status(404).send({ errorType: "DNE", stock });
     else {
         user.stocks.splice(found, 1);
         await user.save();
+        res.send(stock);
     }
 });
 
