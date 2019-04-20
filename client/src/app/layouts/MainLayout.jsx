@@ -1,9 +1,11 @@
 import React, { Component } from "react";
 import { Menu } from "semantic-ui-react";
-import { Route } from "react-router-dom";
+import { Route, Redirect } from "react-router-dom";
+import { isAuth } from "../services/auth";
 
 class MainLayout extends Component {
     render() {
+        if (!isAuth()) return <Redirect to='/' />;
         return (
             <Route
                 render={(props) => {
@@ -12,7 +14,7 @@ class MainLayout extends Component {
                             <Menu fixed='top' inverted>
                                 <Menu.Item>Stocks</Menu.Item>
                             </Menu>
-                            {/* <this.props.component {...props} /> */}
+                            <this.props.component {...props} />
                         </div>
                     );
                 }}

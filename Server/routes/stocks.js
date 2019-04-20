@@ -4,7 +4,7 @@ const verifyToken = require("../services/authenticate").verifyToken;
 
 const User = require("../db/models/User");
 
-router.get("/stocks", verifyToken, async (req, res) => {
+router.get("/getStocks", verifyToken, async (req, res) => {
     const user = await User.findOne({ username: req.decoded.user });
     const { stocks } = user;
     //TODO alphavantage api call to get stock data then just send back to client
@@ -18,7 +18,7 @@ router.post("/addStock", verifyToken, async (req, res) => {
     await user.save();
 });
 
-router.delete("deleteStock", verifyToken, async (req, res) => {
+router.post("deleteStock", verifyToken, async (req, res) => {
     const { stock } = req.body;
     const user = await User.findOne({ username: req.decoded.user });
 

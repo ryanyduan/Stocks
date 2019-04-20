@@ -1,9 +1,16 @@
 import React, { Component } from "react";
 import { Table } from "semantic-ui-react";
+import { connect } from "react-redux";
+import * as actions from "../redux/actions";
 
-class Table extends Component {
+class StocksTable extends Component {
     constructor(props) {
         super(props);
+    }
+
+    componentDidMount() {
+        this.props.fetchStocks();
+        console.log(this.props.stocks);
     }
 
     render() {
@@ -23,4 +30,11 @@ class Table extends Component {
     }
 }
 
-export default Table;
+const mapStateToProps = (state) => ({
+    stocks: state.stocks
+});
+
+export default connect(
+    mapStateToProps,
+    actions
+)(StocksTable);

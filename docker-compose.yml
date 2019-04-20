@@ -41,8 +41,8 @@ services:
         environment:
             - API_URL=http://172.96.240.11:5000
         depends_on:
-            - api
             - mongo
+            - api
         networks:
             webappnetwork:
                 ipv4_address: "172.96.240.10"

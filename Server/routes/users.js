@@ -8,7 +8,7 @@ const verifyToken = require("../services/authenticate").verifyToken;
 const User = require("../db/models/User");
 
 router.post("/login", async (req, res) => {
-    console.log("login")
+    console.log("login");
     const { user, password } = req.body;
 
     const exists = await User.findOne({

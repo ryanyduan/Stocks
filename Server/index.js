@@ -11,21 +11,13 @@ app.use((req, res, next) => {
     res.set({
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE",
-        "Access-Control-Allow-Headers": "Content-Type"
+        "Access-Control-Allow-Headers":
+            "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers, authorization"
     });
     next();
 });
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-
-// Sessions
-app.use(
-    session({
-        secret: "jiafoerzhewhhowehfaefh", // this is used to hash
-        resave: false, // save only if user edits session
-        saveUninitialized: false // dont save unless logged in
-    })
-);
 
 app.use(router);
 
