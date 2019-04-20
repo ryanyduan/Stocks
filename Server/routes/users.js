@@ -6,6 +6,7 @@ const config = require("../config");
 const verifyToken = require("../services/authenticate").verifyToken;
 
 const User = require("../db/models/User");
+const Token = require("../db/models/Token");
 
 router.post("/login", async (req, res) => {
     const { user, password } = req.body;
@@ -30,8 +31,18 @@ router.post("/login", async (req, res) => {
     } else res.status(403).send({ errorType: "DNE" });
 });
 
-router.post("/logout", verifyToken, (req, res) => {
-    // TO DO
+router.post("/logout", verifyToken, async (req, res) => {
+    let token = req.headers["x-access-token"] || req.headers["authorization"]; // Express headers are auto converted to lowercase
+
+    if (token) {
+        if (token.startsWith("Bearer ")) {
+            // Remove Bearer from string
+            token = token.slice(7, token.length);
+            const newToken = new Token({ token });
+            await newToken.save();
+            res.sendStatus(200);
+        }
+    } else res.status(401).send({ errorType: "no-token" });
 });
 
 router.post("/register", async (req, res) => {

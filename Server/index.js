@@ -1,5 +1,4 @@
 const express = require("express");
-const session = require("express-session");
 const { startDb } = require("./db/index");
 const router = require("./routes");
 
