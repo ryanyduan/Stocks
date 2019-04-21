@@ -30,6 +30,6 @@ Login with your new credentials and start adding/deleting stocks from your portf
 
 ## Built With
 
-* [Express](https://expressjs.com/ 
+* [Express](https://expressjs.com/)
 * [React](https://reactjs.org/) 
 * [MongoDB](https://www.mongodb.com/)
