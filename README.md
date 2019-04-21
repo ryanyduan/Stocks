@@ -6,7 +6,7 @@ Simple app to maintain a portfolio of stocks
 
 ### Requirements
 
-[Docker](https://www.docker.com/get-started)
+[Docker](https://www.docker.com/get-started) :whale:
 
 ### Installing
 
