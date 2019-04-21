@@ -19,6 +19,8 @@ api.interceptors.request.use(
 
 export const login = (credentials) => api.post("/users/login", credentials).catch((err) => err.response);
 
+export const logout = () => api.post("/users/logout").catch((err) => err.response);
+
 export const register = (credentials) => api.post("/users/register", credentials).catch((err) => err.response);
 
 export const getStocks = () => api.get("/stocks/getStocks").catch((err) => err.response);
