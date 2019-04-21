@@ -17,7 +17,7 @@ services:
         ports:
             - "5000:5000"
         volumes:
-            - ./Server:/api
+            - ./Server:/api/
             - /Server/node_modules
         environment:
             - DB_URL=172.96.240.12
@@ -36,7 +36,7 @@ services:
         ports:
             - "3000:3000"
         volumes:
-            - ./client:/client
+            - ./client:/client/
             - /client/node_modules
         environment:
             - API_URL=http://172.96.240.11:5000
@@ -52,5 +52,4 @@ networks:
         ipam:
             driver: default
             config:
-                - 
-                  subnet: 172.96.240.0/24
+                - subnet: 172.96.240.0/24
