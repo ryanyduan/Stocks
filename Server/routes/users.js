@@ -48,6 +48,10 @@ router.post("/logout", verifyToken, async (req, res) => {
 router.post("/register", async (req, res) => {
     const { email, username, password } = req.body;
 
+    if (!email || !username || !password) {
+        return res.sendStatus(404);
+    }
+
     const usernameExists = await User.findOne({ username });
     const emailExists = await User.findOne({ email });
 
