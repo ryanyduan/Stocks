@@ -6,7 +6,7 @@ Simple app to maintain a portfolio of stocks
 
 ### Requirements
 
-[Docker](https://www.docker.com/get-started)
+[Docker](https://www.docker.com/get-started) :whale:
 
 ### Installing
 
@@ -26,6 +26,8 @@ docker-compose up -d
 Click the Sign Up link and make a new account
 
 Login with your new credentials and start adding/deleting stocks from your portfolio! :moneybag: :moneybag:
+
+***Note: Stocks must be added by their ticker symbols (AAPL for Apple)***
 
 
 ## Built With
