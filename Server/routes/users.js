@@ -14,7 +14,6 @@ router.post("/login", async (req, res) => {
     const exists = await User.findOne({
         $or: [{ username: user }, { email: user }]
     });
-
     if (exists) {
         const match = await bcrypt.compare(password, exists.password);
         if (match) {
@@ -28,7 +27,7 @@ router.post("/login", async (req, res) => {
                 }
             );
         } else res.status(403).send({ errorType: "password" });
-    } else res.status(403).send({ errorType: "DNE" });
+    } else return res.status(403).send({ errorType: "DNE" });
 });
 
 router.post("/logout", verifyToken, async (req, res) => {
