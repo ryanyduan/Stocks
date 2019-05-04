@@ -5,7 +5,7 @@ axios.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded
 const publicRoutes = ["/users/login", "/users/register"];
 
 const api = axios.create({
-    baseURL: "//172.96.240.11:5000"
+    baseURL: "//localhost:5000"
 });
 
 api.interceptors.request.use(
