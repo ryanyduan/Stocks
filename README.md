@@ -23,6 +23,8 @@ docker-compose up -d
 
 ## Using the app
 
+Go to localhost:3000
+
 Click the Sign Up link and make a new account
 
 Login with your new credentials and start adding/deleting stocks from your portfolio! :moneybag: :moneybag:
